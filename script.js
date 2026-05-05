@@ -1,8 +1,3 @@
-// Safety: always close all modals on page load
-document.getElementById('delete-modal').classList.add('hidden');
-document.getElementById('add-modal').classList.add('hidden');
-document.getElementById('cancel-modal').classList.add('hidden');
-
 // ── Cancel how-to guides ──────────────────────────────────────────
 const CANCEL_GUIDES = {
   Netflix: [
@@ -209,4 +204,7 @@ document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') { closeModal(); closeCancelModal(); }
 });
 
+document.getElementById('add-modal').classList.add('hidden');
+document.getElementById('cancel-modal').classList.add('hidden');
+document.getElementById('delete-modal').classList.add('hidden');
 renderTable();
