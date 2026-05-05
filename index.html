@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SubZero – Subscription Audit</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">❄</div>
+      <div>
+        <div class="logo-text">SubZero</div>
+        <div class="tagline">Audit & kill your subscriptions</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+  </header>
+
+  <!-- MAIN DASHBOARD -->
+  <main>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Monthly Spend</div>
+        <div class="stat-value red" id="stat-monthly">€0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Yearly Spend</div>
+        <div class="stat-value red" id="stat-yearly">€0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Potential Savings / mo</div>
+        <div class="stat-value green" id="stat-savings">€0.00</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="savings-bar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Subscriptions</div>
+        <div class="stat-value purple" id="stat-count">0</div>
+      </div>
+    </div>
+
+    <!-- TABLE HEADER -->
+    <div class="section-header">
+      <div class="section-title">Your Subscriptions</div>
+      <select id="filter-status" onchange="renderTable()">
+        <option value="all">All</option>
+        <option value="keep">Keep</option>
+        <option value="review">Review</option>
+        <option value="cancel">Cancel</option>
+        <option value="none">Untagged</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table class="subs-table">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Category</th>
+            <th>Cost</th>
+            <th>Billing</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="subs-body"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-icon">📋</div>
+        <p>No subscriptions yet.</p>
+        <p>Click <strong>"+ Add Subscription"</strong> to get started.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ADD MODAL -->
+  <div id="add-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Add Subscription</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Service Name</label>
+          <input type="text" id="f-name" placeholder="e.g. Netflix" />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="f-category">
+            <option>Streaming</option>
+            <option>Music</option>
+            <option>Software</option>
+            <option>Gaming</option>
+            <option>News</option>
+            <option>Fitness</option>
+            <option>Cloud Storage</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cost (€)</label>
+          <input type="number" id="f-cost" placeholder="9.99" step="0.01" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Billing Cycle</label>
+          <select id="f-billing">
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="none">Untagged</option>
+          <option value="keep">Keep</option>
+          <option value="review">Review</option>
+          <option value="cancel">Cancel</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveSubscription()">Add Subscription</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANCEL GUIDE MODAL -->
+  <div id="cancel-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="cancel-title">Cancel Guide</h2>
+      <div class="cancel-guide">
+        <h4>How to cancel:</h4>
+        <ol id="cancel-steps"></ol>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeCancelModal()">Close</button>
+        <button class="btn btn-danger" onclick="markCancelled()">Mark as Cancelled</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
