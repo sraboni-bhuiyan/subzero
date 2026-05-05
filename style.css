@@ -320,3 +320,6 @@ main { max-width: 1150px; margin: 0 auto; padding: 28px 20px; }
 .cancel-guide h4 { font-size: 13px; color: var(--yellow); margin-bottom: 10px; }
 .cancel-guide ol { padding-left: 18px; }
 .cancel-guide li { font-size: 13px; color: var(--text-dim); line-height: 2.1; }
+
+/* ── Utility ── */
+.hidden { display: none !important; }
