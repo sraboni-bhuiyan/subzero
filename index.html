@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SubZero – Subscription Audit</title>
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SubZero – Subscription Audit</title>
+  " />
+  /svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>" />
 </head>
 <body>
 
@@ -17,7 +18,11 @@
         <div class="tagline">Audit & kill your subscriptions</div>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+    <div class="header-actions">
+      <button class="btn btn-icon" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+      <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+    </div>
   </header>
 
   <!-- MAIN DASHBOARD -->
@@ -46,15 +51,45 @@
       </div>
     </div>
 
-    <!-- TABLE HEADER -->
-    <div class="section-header">
-      <div class="section-title">Your Subscriptions</div>
+    <!-- CONTROLS ROW -->
+    <div class="controls-row">
+      <!-- Search -->
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search subscriptions..."
+          oninput="renderTable()"
+        />
+      </div>
+
+      <!-- Currency -->
+      <select id="currency-select" onchange="changeCurrency()" title="Currency">
+        <option value="€">€ EUR</option>
+        <option value="$">$ USD</option>
+        <option value="£">£ GBP</option>
+        <option value="₺">₺ TRY</option>
+        <option value="Fr">Fr CHF</option>
+        <option value="zł">zł PLN</option>
+      </select>
+
+      <!-- Filter -->
       <select id="filter-status" onchange="renderTable()">
-        <option value="all">All</option>
+        <option value="all">All Statuses</option>
         <option value="keep">Keep</option>
         <option value="review">Review</option>
         <option value="cancel">Cancel</option>
         <option value="none">Untagged</option>
+      </select>
+
+      <!-- Sort -->
+      <select id="sort-select" onchange="renderTable()">
+        <option value="none">Sort: Default</option>
+        <option value="name-asc">Name A → Z</option>
+        <option value="name-desc">Name Z → A</option>
+        <option value="cost-asc">Cost: Low → High</option>
+        <option value="cost-desc">Cost: High → Low</option>
       </select>
     </div>
 
@@ -75,24 +110,24 @@
       </table>
       <div id="empty-state" class="empty-state hidden">
         <div class="empty-icon">📋</div>
-        <p>No subscriptions yet.</p>
+        <p>No subscriptions found.</p>
         <p>Click <strong>"+ Add Subscription"</strong> to get started.</p>
       </div>
     </div>
 
   </main>
 
-  <!-- ADD MODAL -->
+  <!-- ADD / EDIT MODAL -->
   <div id="add-modal" class="modal-overlay hidden">
     <div class="modal">
-      <h2>Add Subscription</h2>
+      <h2 id="modal-title">Add Subscription</h2>
       <div class="form-row">
         <div class="form-group">
-          <label>Service Name</label>
+          abel>Service Name</label>
           <input type="text" id="f-name" placeholder="e.g. Netflix" />
         </div>
         <div class="form-group">
-          <label>Category</label>
+          abel>Category</label>
           <select id="f-category">
             <option>Streaming</option>
             <option>Music</option>
@@ -107,11 +142,11 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label>Cost (€)</label>
+          abel>Cost (<span class="currency-label">€</span>)</label>
           <input type="number" id="f-cost" placeholder="9.99" step="0.01" min="0" />
         </div>
         <div class="form-group">
-          <label>Billing Cycle</label>
+          abel>Billing Cycle</label>
           <select id="f-billing">
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
@@ -120,7 +155,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label>Status</label>
+        abel>Status</label>
         <select id="f-status">
           <option value="none">Untagged</option>
           <option value="keep">Keep</option>
@@ -130,7 +165,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveSubscription()">Add Subscription</button>
+        <button class="btn btn-primary" id="modal-save-btn" onclick="saveSubscription()">Add Subscription</button>
       </div>
     </div>
   </div>
@@ -146,6 +181,18 @@
       <div class="modal-footer">
         <button class="btn btn-ghost" onclick="closeCancelModal()">Close</button>
         <button class="btn btn-danger" onclick="markCancelled()">Mark as Cancelled</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="delete-modal" class="modal-overlay hidden">
+    <div class="modal modal-sm">
+      <h2>Delete Subscription</h2>
+      <p class="delete-msg">Are you sure you want to delete <strong id="delete-name"></strong>? This cannot be undone.</p>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
       </div>
     </div>
   </div>
