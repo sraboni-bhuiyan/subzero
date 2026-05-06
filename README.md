@@ -36,21 +36,6 @@ SubZero helps you track every subscription you pay for, tag what to keep or cut,
 - 🌙 **Dark & light mode** — Toggle between themes, preference saved automatically
 - 🔒 **100% private** — All data stays in your browser via localStorage. No account, no server, no tracking
 
----
-
-## 🗂️ Project Structure
-subzero/
-├── index.html # Landing page
-├── pages/
-│ └── app.html # Dashboard app
-└── assets/
-├── css/
-│ ├── main.css # Landing page styles
-│ └── app.css # Dashboard styles
-└── js/
-├── theme.js # Dark/light mode toggle
-└── app.js # All app logic
-
 
 ---
 
