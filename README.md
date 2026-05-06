@@ -20,6 +20,10 @@ SubZero helps you track every subscription you pay for, tag what to keep or cut,
 
 > Landing page · Dashboard · Cancel Guide modal
 
+![SubZero Dashboard](assets/images/landing%20page.png)
+![SubZero Dashboard](assets/images/subscription%20list.png)
+![SubZero Dashboard](assets/images/cancel%20guide.png)
+
 *(Add screenshots here after deployment)*
 
 ---
