@@ -3,200 +3,201 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SubZero – Subscription Audit</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄</text></svg>" />
+  <title>SubZero – Stop Paying for Subscriptions You Don't Use</title>
+  <meta name="description" content="SubZero helps you track, audit and cancel subscriptions you're wasting money on. Free. Private. No sign-up." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
       <div class="logo-icon">❄</div>
-      <div>
-        <div class="logo-text">SubZero</div>
-        <div class="tagline">Audit & kill your subscriptions</div>
-      </div>
+      <span class="logo-text">SubZero</span>
     </div>
-    <div class="header-actions">
-      <button class="btn btn-icon" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
-      <button class="btn btn-ghost" onclick="exportCSV()">⬇ Export CSV</button>
-      <button class="btn btn-primary" onclick="openAddModal()">+ Add Subscription</button>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#features">Features</a>
+      <a href="pages/app.html" class="btn btn-primary">Start Free →</a>
     </div>
-  </header>
+    <button class="btn-icon" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+  </nav>
 
-  <!-- MAIN DASHBOARD -->
-  <main>
-
-    <!-- STATS -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Monthly Spend</div>
-        <div class="stat-value red" id="stat-monthly">€0.00</div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">💸 Average user finds €600+/year in unused subscriptions</div>
+      <h1 class="hero-title">
+        Stop bleeding money on<br />
+        <span class="gradient-text">subscriptions you forgot.</span>
+      </h1>
+      <p class="hero-sub">
+        SubZero audits all your subscriptions in one place. See what you spend,
+        tag what to cut, and cancel with a step-by-step guide — in under 5 minutes.
+      </p>
+      <div class="hero-cta">
+        <a href="pages/app.html" class="btn btn-primary btn-lg">Start Auditing Free →</a>
+        <span class="hero-note">🔒 No account · Stays in your browser · 100% free</span>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Yearly Spend</div>
-        <div class="stat-value red" id="stat-yearly">€0.00</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Potential Savings / mo</div>
-        <div class="stat-value green" id="stat-savings">€0.00</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="savings-bar" style="width:0%"></div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-val">€0</span>
+          <span class="stat-lbl">Cost forever</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-val">5 min</span>
+          <span class="stat-lbl">To audit everything</span>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-val">100%</span>
+          <span class="stat-lbl">Private & local</span>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Total Subscriptions</div>
-        <div class="stat-value purple" id="stat-count">0</div>
-      </div>
     </div>
+  </section>
 
-    <!-- CONTROLS ROW -->
-    <div class="controls-row">
-      <!-- Search -->
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search subscriptions..."
-          oninput="renderTable()"
-        />
-      </div>
-
-      <!-- Currency -->
-      <select id="currency-select" onchange="changeCurrency()" title="Currency">
-        <option value="€">€ EUR</option>
-        <option value="$">$ USD</option>
-        <option value="£">£ GBP</option>
-        <option value="₺">₺ TRY</option>
-        <option value="Fr">Fr CHF</option>
-        <option value="zł">zł PLN</option>
-      </select>
-
-      <!-- Filter -->
-      <select id="filter-status" onchange="renderTable()">
-        <option value="all">All Statuses</option>
-        <option value="keep">Keep</option>
-        <option value="review">Review</option>
-        <option value="cancel">Cancel</option>
-        <option value="none">Untagged</option>
-      </select>
-
-      <!-- Sort -->
-      <select id="sort-select" onchange="renderTable()">
-        <option value="none">Sort: Default</option>
-        <option value="name-asc">Name A → Z</option>
-        <option value="name-desc">Name Z → A</option>
-        <option value="cost-asc">Cost: Low → High</option>
-        <option value="cost-desc">Cost: High → Low</option>
-      </select>
-    </div>
-
-    <!-- TABLE -->
-    <div class="table-wrap">
-      <table class="subs-table">
-        <thead>
-          <tr>
-            <th>Service</th>
-            <th>Category</th>
-            <th>Cost</th>
-            <th>Billing</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="subs-body"></tbody>
-      </table>
-      <div id="empty-state" class="empty-state hidden">
-        <div class="empty-icon">📋</div>
-        <p>No subscriptions found.</p>
-        <p>Click <strong>"+ Add Subscription"</strong> to get started.</p>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- ADD / EDIT MODAL -->
-  <div id="add-modal" class="modal-overlay hidden">
-    <div class="modal">
-      <h2 id="modal-title">Add Subscription</h2>
-      <div class="form-row">
-        <div class="form-group">
-          abel>Service Name</label>
-          <input type="text" id="f-name" placeholder="e.g. Netflix" />
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works">
+    <div class="section-inner">
+      <p class="section-tag">How it works</p>
+      <h2 class="section-title">3 steps to reclaim your money</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📋</div>
+          <h3>Add your subscriptions</h3>
+          <p>Enter what you pay for — Netflix, Spotify, SaaS tools, gym, anything. Takes 2 minutes.</p>
         </div>
-        <div class="form-group">
-          abel>Category</label>
-          <select id="f-category">
-            <option>Streaming</option>
-            <option>Music</option>
-            <option>Software</option>
-            <option>Gaming</option>
-            <option>News</option>
-            <option>Fitness</option>
-            <option>Cloud Storage</option>
-            <option>Other</option>
-          </select>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🏷️</div>
+          <h3>Tag each one</h3>
+          <p>Mark every subscription as <strong>Keep</strong>, <strong>Review</strong>, or <strong>Cancel</strong>. See your savings update live.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">✂️</div>
+          <h3>Cancel with a guide</h3>
+          <p>Get step-by-step cancellation instructions per service. Mark done and watch savings grow.</p>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          abel>Cost (<span class="currency-label">€</span>)</label>
-          <input type="number" id="f-cost" placeholder="9.99" step="0.01" min="0" />
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section section-alt" id="features">
+    <div class="section-inner">
+      <p class="section-tag">Features</p>
+      <h2 class="section-title">Everything you need, nothing you don't</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Live spending dashboard</h3>
+          <p>Monthly & yearly totals update in real-time as you add or tag subscriptions.</p>
         </div>
-        <div class="form-group">
-          abel>Billing Cycle</label>
-          <select id="f-billing">
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-            <option value="weekly">Weekly</option>
-          </select>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Search, filter & sort</h3>
+          <p>Find anything instantly. Sort by cost, filter by status, search by name.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✏️</div>
+          <h3>Edit & delete</h3>
+          <p>Update costs when prices rise. Delete subscriptions you've already cancelled.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📖</div>
+          <h3>Cancel guides</h3>
+          <p>Step-by-step instructions for Netflix, Spotify, Adobe, Amazon and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⬇️</div>
+          <h3>Export to CSV</h3>
+          <p>Download your full list to share or analyze in Excel or Google Sheets.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>100% private</h3>
+          <p>All data stays in your browser. No account. No server. No tracking. Ever.</p>
         </div>
       </div>
-      <div class="form-group">
-        abel>Status</label>
-        <select id="f-status">
-          <option value="none">Untagged</option>
-          <option value="keep">Keep</option>
-          <option value="review">Review</option>
-          <option value="cancel">Cancel</option>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" id="modal-save-btn" onclick="saveSubscription()">Add Subscription</button>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="proof">
+    <div class="section-inner">
+      <p class="section-tag">Real savings</p>
+      <h2 class="section-title">People are surprised by what they find</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Found €340/year in subscriptions I completely forgot about. Cancelled 4 in one afternoon."</p>
+          <div class="t-author">
+            <div class="avatar">MK</div>
+            <div>
+              <div class="author-name">Mehmet K.</div>
+              <div class="author-loc">Berlin, DE</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Put in all my subs in under 5 minutes. Realized I was paying for 3 cloud storage services."</p>
+          <div class="t-author">
+            <div class="avatar">SL</div>
+            <div>
+              <div class="author-name">Sara L.</div>
+              <div class="author-loc">Amsterdam, NL</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"The cancel guides are genius. No more Googling 'how to cancel Adobe'. It's all right there."</p>
+          <div class="t-author">
+            <div class="avatar">TW</div>
+            <div>
+              <div class="author-name">Tom W.</div>
+              <div class="author-loc">London, UK</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- CANCEL GUIDE MODAL -->
-  <div id="cancel-modal" class="modal-overlay hidden">
-    <div class="modal">
-      <h2 id="cancel-title">Cancel Guide</h2>
-      <div class="cancel-guide">
-        <h4>How to cancel:</h4>
-        <ol id="cancel-steps"></ol>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeCancelModal()">Close</button>
-        <button class="btn btn-danger" onclick="markCancelled()">Mark as Cancelled</button>
-      </div>
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="section-inner" style="text-align:center;">
+      <h2>Find out what you're <span class="gradient-text">actually</span> spending.</h2>
+      <p>2 minutes. Free. Your data never leaves your browser.</p>
+      <a href="pages/app.html" class="btn btn-primary btn-lg">Start Auditing Free →</a>
     </div>
-  </div>
+  </section>
 
-  <!-- DELETE CONFIRM MODAL -->
-  <div id="delete-modal" class="modal-overlay hidden">
-    <div class="modal modal-sm">
-      <h2>Delete Subscription</h2>
-      <p class="delete-msg">Are you sure you want to delete <strong id="delete-name"></strong>? This cannot be undone.</p>
-      <div class="modal-footer">
-        <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
-        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-icon logo-sm">❄</div>
+        <span class="logo-text">SubZero</span>
       </div>
+      <p class="footer-copy">Your data never leaves your browser. Built for people who hate wasting money.</p>
+      <p class="footer-links">
+        v1.0 &nbsp;·&nbsp;
+        <a href="https://github.com/sraboni-bhuiyan/subzero" target="_blank">GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="pages/app.html">Open App</a>
+      </p>
     </div>
-  </div>
+  </footer>
 
-  <script src="script.js"></script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>
