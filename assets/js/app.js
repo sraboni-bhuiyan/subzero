@@ -99,7 +99,7 @@ let editingId      = null;
 let cancelTargetId = null;
 let deleteTargetId = null;
 
-if (!subs) { subs = DEMO_SUBS; save(); }
+if (!subs) { subs = []; save(); }
 
 // ════════════════════════════════════════════════════════
 //  PERSISTENCE
